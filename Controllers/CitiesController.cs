@@ -9,26 +9,22 @@ namespace api_core.Controllers
     [Route("api/cities")]
     public class CitiesController : Controller
     {
-        // GET api/cities
         [HttpGet]
-        public JsonResult Get()
+        public IActionResult Get()
         {
-            return new JsonResult(
-                new List<object>() {
-                    new { id=1, Name="Lisbon" },
-                    new { id=2, Name="Oporto" },
-                    new { id=3, Name="Faro" },
-                    new { id=4, Name="Aalborg" },
-                    new { id=5, Name="Copenhagen" },
-                    new { id=6, Name="Aarhus" }
-                });
+            return Ok(CitiesDataStore.Current.Cities);
         }
-
-        // GET api/values/5
+        
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetCity(int id)
         {
-            return "value";
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == id);
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(city);
         }
 
         // POST api/values
